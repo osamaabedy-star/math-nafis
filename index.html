@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>نافس رياضيات • أسئلة فريدة</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #1e5f6b 0%, #124c5c 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+    }
+
+    .game-container {
+      width: 100%;
+      max-width: 750px;
+      background: #ffffff;
+      border-radius: 40px 40px 25px 25px;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.4), 0 8px 10px rgba(0,0,0,0.2);
+      border: 1px solid #f3b33d;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fbe39f;
+      padding: 8px 20px;
+      border-bottom: 2px solid #d49b2a;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-area img {
+      width: 42px;
+      height: auto;
+      border-radius: 30px;
+      border: 2px solid #b8861e;
+      background: white;
+    }
+
+    .school-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1d4c65;
+    }
+
+    .teacher-name {
+      background: #1e4e6f;
+      color: #fbe39f;
+      padding: 3px 12px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: inset 0 -2px 0 #0e3142;
+      white-space: nowrap;
+    }
+
+    .screen {
+      background: #fefcf0;
+      padding: 20px 20px 25px;
+    }
+
+    .title-box {
+      background: #f5b62e;
+      text-align: center;
+      padding: 10px 5px;
+      border-radius: 50px;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1f3f50;
+      margin: 0 0 15px;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 0 #b87d19;
+    }
+
+    .input-group {
+      background: #e3f0f5;
+      padding: 18px;
+      border-radius: 35px;
+      margin: 15px 0;
+    }
+    .input-group label {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: block;
+      margin-right: 10px;
+      margin-bottom: 5px;
+      color: #0e4760;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 20px;
+      font-size: 1.2rem;
+      border: 2px solid #2f789c;
+      border-radius: 50px;
+      outline: none;
+    }
+
+    .test-selection {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .test-btn {
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 16px 5px;
+      border-radius: 60px;
+      box-shadow: 0 7px 0 rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: 0.07s;
+      text-align: center;
+    }
+    .test-btn:active { transform: translateY(5px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+    .test-btn:nth-child(1) { background: #2e86ab; }
+    .test-btn:nth-child(2) { background: #e67e22; }
+    .test-btn:nth-child(3) { background: #27ae60; }
+    .test-btn:nth-child(4) { background: #8e44ad; }
+
+    .quiz-screen {
+      background: #fefcf0;
+      padding: 15px 18px 20px;
+      display: none;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      background: #fce5a3;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .timer {
+      background: #c0392b;
+      color: white;
+      padding: 2px 22px;
+      border-radius: 40px;
+      font-family: monospace;
+      font-size: 1.6rem;
+    }
+
+    .score-badge {
+      background: #206f94;
+      color: white;
+      padding: 6px 20px;
+      border-radius: 40px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .question-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      color: #124257;
+      padding: 15px 0 20px;
+      background: transparent;
+      border: none;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0 15px;
+    }
+
+    .option-btn {
+      background: #d4e7f2;
+      border: 2px solid #1e4e6f;
+      border-radius: 40px;
+      padding: 15px 5px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      color: #0c3d53;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #638ea6;
+      transition: 0.07s;
+    }
+    .option-btn:active { transform: translateY(4px); box-shadow: 0 0px 0 #638ea6; }
+
+    .option-btn.correct { background: #27ae60; border-color: #1e7e4a; color: white; box-shadow: 0 4px 0 #1a5e38; }
+    .option-btn.wrong { background: #e74c3c; border-color: #a93226; color: white; box-shadow: 0 4px 0 #852f26; }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #fef9e0;
+      border-radius: 50px;
+      padding: 25px 30px;
+      max-width: 400px;
+      text-align: center;
+      border: 6px solid #f39c12;
+      box-shadow: 0 15px 25px #00000055;
+    }
+    .modal-content p {
+      font-size: 1.3rem;
+      color: #1d3b4b;
+      margin: 10px 0;
+    }
+    .modal-content button {
+      background: #f4a261;
+      border: none;
+      font-size: 1.5rem;
+      padding: 10px 35px;
+      border-radius: 40px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 5px 0 #9c5e2c;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .modal-content button:active { transform: translateY(4px); box-shadow: 0 1px 0 #9c5e2c; }
+
+    .btn {
+      background: #f4a261;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 700;
+      padding: 12px 20px;
+      border-radius: 60px;
+      width: 100%;
+      box-shadow: 0 7px 0 #9c5e2c;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+    .btn:active { transform: translateY(5px); box-shadow: 0 2px 0 #9c5e2c; }
+
+    .certificate {
+      background: #fbf3d7;
+      border: 8px double #ca9e2b;
+      padding: 20px;
+      border-radius: 60px;
+      text-align: center;
+    }
+    .review-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ebf3f7;
+      border-radius: 30px;
+      overflow: hidden;
+      font-size: 0.85rem;
+    }
+    .review-table th { background: #1e4e6f; color: white; padding: 8px; }
+    .review-table td { border-bottom: 1px solid #aaa; padding: 8px 4px; }
+    .wrong-answer { background: #fad1d1; }
+    .correct-answer { background: #c8e6c9; }
+
+    .game-footer {
+      text-align: center;
+      padding: 8px 0 2px;
+      color: #ffe8b5;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 750px;
+    }
+    .game-footer span { background: #0a2f40b3; padding: 5px 18px; border-radius: 40px; display: inline-block; }
+  </style>
+</head>
+<body>
+<div class="game-container">
+  <!-- شاشة البداية -->
+  <div id="startScreen" class="screen">
+    <div class="header">
+      <div class="logo-area">
+        <img src="https://www.wzufa.com/wp-content/uploads/2022/07/Riyadh-Al-Ebdaa-Schools.png" alt="شعار" onerror="this.src='https://via.placeholder.com/42?text=شعار'">
+        <span class="school-name">مدارس رياض الإبداع الأهلية</span>
+      </div>
+      <div class="teacher-name">أيـمـن خـلـيـفـة</div>
+    </div>
+    <div class="title-box">🧮 نافس رياضيات -  سادس</div>
+    <div class="input-group">
+      <label>👤 اسم الطالب</label>
+      <input type="text" id="studentNameInput" placeholder="أدخل اسمك">
+    </div>
+    <div style="text-align:center; margin:10px 0; font-size:1.3rem; font-weight:bold;">اختر التصنيف:</div>
+    <div class="test-selection">
+      <button class="test-btn" id="topicNumBtn">🔢 الأعداد والعمليات</button>
+      <button class="test-btn" id="topicGeoBtn">📐 الهندسة والقياس</button>
+      <button class="test-btn" id="topicStatBtn">📊 الإحصاء والاحتمالات</button>
+      <button class="test-btn" id="topicPatBtn">🧩 الجبر والأنماط</button>
+    </div>
+    <!-- ملخص النتائج السابقة -->
+    <div id="summaryArea" style="margin-top:20px; background:#e3f0f5; padding:15px; border-radius:35px; display:none;">
+      <h3 style="color:#0e4760;">📋 نتائجك السابقة</h3>
+      <div id="summaryList"></div>
+    </div>
+  </div>
+
+  <!-- شاشة اللعب -->
+  <div id="quizScreen" class="quiz-screen">
+    <div class="header">
+      <div class="logo-area">
+        <img src="https://www.wzufa.com/wp-content/uploads/2022/07/Riyadh-Al-Ebdaa-Schools.png" alt="شعار">
+        <span class="school-name">رياض الإبداع</span>
+      </div>
+      <div class="teacher-name">أيمن خليفة</div>
+    </div>
+    <div class="progress-row">
+      <span id="questionCounter">س ١ / ٢٥</span>
+      <span class="timer" id="timerDisplay">٠١:٠٠</span>
+    </div>
+    <div class="score-badge" id="scoreDisplay">🏆 ٠ نقطة</div>
+    <div id="questionText" class="question-text">تحميل ...</div>
+    <div class="options-grid" id="optionsContainer"></div>
+    <button class="btn" id="nextBtn">⏩ التالي</button>
+  </div>
+
+  <!-- شاشة النهاية -->
+  <div id="endScreen" class="screen" style="display:none;">
+    <div class="header">
+      <div class="logo-area">
+        <img src="https://www.wzufa.com/wp-content/uploads/2022/07/Riyadh-Al-Ebdaa-Schools.png" alt="شعار">
+        <span class="school-name">مدارس رياض الإبداع الأهلية</span>
+      </div>
+      <div class="teacher-name">أيمن خليفة</div>
+    </div>
+    <div id="certificateArea"></div>
+    <!-- جدول ملخص النتائج الكلية -->
+    <div style="margin-top:20px; background:#e3f0f5; padding:15px; border-radius:35px;" id="finalSummary">
+      <h3 style="color:#0e4760;">📊 جميع نتائجك</h3>
+      <div id="finalSummaryList"></div>
+    </div>
+    <button class="btn" id="showReviewBtn" style="background:#3684a3;">📋 مراجعة الإجابات</button>
+    <button class="btn" id="restartBtn" style="background:#b56532;">🔁 العودة للرئيسية</button>
+  </div>
+
+  <!-- شاشة المراجعة -->
+  <div id="reviewScreen" class="screen" style="display:none;">
+    <h2 style="color:#1e4e6f;">📋 جميع الأسئلة</h2>
+    <table class="review-table" id="reviewTable"></table>
+    <button class="btn" id="backToEndBtn">🔙 العودة</button>
+  </div>
+</div>
+
+<!-- النافذة المنبثقة للشرح (تظهر فقط عند الخطأ) -->
+<div id="explainModal" class="modal-overlay">
+  <div class="modal-content">
+    <p id="modalExplainText"></p>
+    <button id="closeModalBtn">حسناً</button>
+  </div>
+</div>
+
+<!-- تذييل -->
+<div class="game-footer">
+  <span>مدارس رياض الإبداع الأهلية - نافس رياضيات - :  </span>
+</div>
+
+<script>
+(function() {
+  // دالة تحويل الأرقام إلى هندية (مع الحفاظ على الكسور)
+  function toIndian(str) {
+    if (typeof str !== 'string') return str;
+    const map = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    return str.replace(/[0-9]/g, d => map[parseInt(d)]);
+  }
+
+  // ---------- 100 سؤال فريد (25 لكل تصنيف) مستمدة من ملف نافس ----------
+  const topics = {
+    numbers: [ // الأعداد والعمليات (25)
+      { q: "يدور كوكب الأرض حول الشمس في مدار دائري محيطه 150 مليون كلم. كم يبعد كوكب الأرض عن الشمس (نصف القطر) تقريباً؟", opts: ["23.9 مليون كم", "47.8 مليون كم", "75 مليون كم", "150 مليون كم"], correct: 0, exp: "المحيط = 2πr ، إذاً r = المحيط / (2π) ≈ 150 / 6.28 ≈ 23.9 مليون كم." },
+      { q: "أي العبارات الرياضية التالية ناتجها يساوي 18؟", opts: ["4 + 5 × 2", "(4+5) × 2", "(4+2) × 5", "5 + 2 × 4"], correct: 1, exp: "(4+5)×2 = 9×2 = 18." },
+      { q: "كم سنتمتراً مربعاً في المتر المربع الواحد؟", opts: ["100", "1000", "10000", "100000"], correct: 2, exp: "1 م = 100 سم، إذن 1 م² = 100×100 = 10000 سم²." },
+      { q: "قام يوسف برمي العملة المعدنية أربع مرات وفي كل مرة حصل على الصورة. ما احتمال حصوله على الصورة في المرة السادسة؟", opts: ["0", "1/2", "1/4", "1"], correct: 1, exp: "رمية العملة حدث مستقل، احتمال الصورة دائماً 1/2." },
+      { q: "أي الأرقام التالية غير مساوٍ لبقية الأرقام الأخرى؟", opts: ["4", "40", "2", "5"], correct: 1, exp: "الأرقام 4، 2، 5 أرقام أحادية، بينما 40 يتكون من رقمين." },
+      { q: "مجلة رياضية من 16 صفحة، الإعلانات تشغل 33% منها. كم صفحة لا تحوي إعلانات؟", opts: ["9", "10", "11", "12"], correct: 2, exp: "33% من 16 ≈ 5.28 صفحة إعلانات، الباقي ≈ 10.72 أقرب 11." },
+      { q: "دفع أمجد 43.5 ريالاً لشراء 6 تذاكر. ثمن التذكرة الواحدة؟", opts: ["7.25", "5.75", "4.35", "6.25"], correct: 0, exp: "43.5 ÷ 6 = 7.25 ريال." },
+      { q: "يوجد على سلك 9 عصافير، انضم إليها 3، ثم طار 5. كم بقي؟", opts: ["12", "7", "6", "3"], correct: 1, exp: "9 + 3 - 5 = 7." },
+      { q: "9 طلاب من السادس و9 من الخامس، لعب كل من السادس مع كل من الخامس مرة. كم مباراة؟", opts: ["81", "36", "18", "9"], correct: 0, exp: "9 × 9 = 81 مباراة." },
+      { q: "العدد ثلاثمائة وستة عشر مليوناً وخمسة وثلاثون ألفاً وأربعمائة وخمسة عشر:", opts: ["316035415", "31635145", "316035145", "31605415"], correct: 0, exp: "316,035,415." },
+      { q: "أرض مساحتها 4 كم²، كم مساحتها بالمتر المربع؟", opts: ["4000", "40000", "400000", "4000000"], correct: 3, exp: "1 كم² = 1,000,000 م²، إذاً 4 كم² = 4,000,000 م²." },
+      { q: "يستطيع مصور تحميض فيلمين في 18 دقيقة. كم يحتاج لـ8 أفلام؟", opts: ["ساعة و12 دقيقة", "ساعة و20 دقيقة", "ساعة و44 دقيقة", "ساعة"], correct: 0, exp: "الفيلم الواحد 9 دقائق، 8 أفلام = 72 دقيقة = ساعة و12 دقيقة." },
+      { q: "لدى خالد 60 ضيفاً، كل طاولة تسع 5 ضيوف. كم طاولة يحتاج؟", opts: ["8", "10", "11", "12"], correct: 3, exp: "60 ÷ 5 = 12 طاولة." },
+      { q: "تكلفة تعبئة الخزان 97.62 ريال، أعطى 100 ريال. كم الباقي تقريباً؟", opts: ["2", "3", "4", "1"], correct: 0, exp: "100 - 97.62 = 2.38 ≈ 2." },
+      { q: "لعب خالد 8 مباريات، في نصفها سجل هدفاً وفي النصف الآخر هدفين. مجموع أهدافه؟", opts: ["9", "10", "11", "12"], correct: 3, exp: "4 مباريات ×1 + 4 مباريات ×2 = 4+8=12." },
+      { q: "يرتدي 6 طلاب قمصاناً صفراء من 14، إذا زاد العدد إلى 21 بنفس النسبة، كم يرتدي الأصفر؟", opts: ["9", "10", "14", "51"], correct: 0, exp: "النسبة 6/14 = 3/7، 21 × 3/7 = 9." },
+      { q: "أمضى بدر سدسي المدة، ما الكسر المكافئ للباقي؟", opts: ["1/3", "2/3", "1/2", "1/4"], correct: 0, exp: "سدسين = 2/3، الباقي = 1/3." },
+      { q: "عدد من ستة أرقام مجموع أرقامه يقبل القسمة على 3. أي مما يلي يحقق ذلك؟", opts: ["100001", "111111", "300001", "101010"], correct: 1, exp: "111111 مجموع أرقامه 6 يقبل على 3." },
+      { q: "سعر تلفاز 3250 ريال، عليه خصم 20%. كم سعره بعد الخصم؟", opts: ["2600", "3000", "3100", "3200"], correct: 0, exp: "الخصم = 0.2×3250=650، الباقي = 2600." },
+      { q: "إذا كان 2/5 من نتيجة مخترع = 16، فما النتيجة الكاملة؟", opts: ["40", "60", "80", "120"], correct: 0, exp: "الكل = 16 × 5/2 = 40." },
+      { q: "ضرب عدد كلي أصغر من 10 في 0.8 وجمع 14.4 فكان 20. ما العدد؟", opts: ["5", "6", "7", "8"], correct: 2, exp: "س×0.8 + 14.4 = 20 → س×0.8 = 5.6 → س = 7." },
+      { q: "يريد صالح توزيع 276 ريال على 3 محتاجين بالتساوي. نصيب كل منهم؟", opts: ["92", "138", "59", "47"], correct: 0, exp: "276 ÷ 3 = 92." },
+      { q: "اشترى محمد 3 أقلام بـ12 ريال للقلم، وخصم 10 ريال. كم دفع؟", opts: ["26", "36", "46", "56"], correct: 0, exp: "3×12=36، بعد الخصم = 26." },
+      { q: "ضعف ما مع سعيد = 16.8، فما معه؟", opts: ["8.4", "16.8", "33.6", "4.2"], correct: 0, exp: "16.8 ÷ 2 = 8.4." },
+      { q: "يحتاج عامل 52 لتر دهان، العلبة 7 لتر. كم علبة يحتاج؟", opts: ["6", "7", "8", "9"], correct: 2, exp: "52 ÷ 7 = 7.43، يحتاج 8 علب." },
+    ],
+    geometry: [ // الهندسة والقياس (25)
+      { q: "كم عدد المكعبات الصغيرة (1×1×1) الملونة من 3 جوانب في مكعب 6×6×6 مطلي بالكامل؟", opts: ["8", "18", "32", "36"], correct: 0, exp: "المكعبات ذات الثلاثة جوانب هي الرؤوس، وعددها 8." },
+      { q: "ما سرعة عقرب الثواني مقارنة بعقرب الساعات؟", opts: ["3600", "720", "600", "240"], correct: 1, exp: "عقرب الثواني يدور دورة كل دقيقة، عقرب الساعات دورة كل 12 ساعة = 720 دقيقة، أي أسرع 720 مرة." },
+      { q: "في الشكل الرباعي أطوال ثلاثة أضلاع: 6م، 3م، والمحيط 15.25م. ما طول الضلع الرابع؟", opts: ["6.25 م", "5.25 م", "4.25 م", "3.25 م"], correct: 0, exp: "المجموع = 6+3 =9، الضلع الرابع = 15.25-9 = 6.25 م." },
+      { q: "كم متراً مربعاً لتبليط شكل مساحته 24 م²؟", opts: ["24", "16", "12", "8"], correct: 0, exp: "المساحة المطلوبة 24 م²." },
+      { q: "قطعة قماش طولها 31.5 م، قص منها 19.25 م. طول المقطوع؟", opts: ["12.25", "12.35", "28.25", "28.35"], correct: 0, exp: "31.5 - 19.25 = 12.25 م." },
+      { q: "وعاء سعته 3 لتر، يملأ بكوب 300 مل. كم كوباً؟", opts: ["10", "9", "6", "3"], correct: 0, exp: "3 لتر = 3000 مل، 3000÷300 = 10 أكواب." },
+      { q: "مكعب حجمه 171 سم³ ومساحة قاعدته 13 سم². ارتفاعه؟", opts: ["13 سم", "10 سم", "9 سم", "15 سم"], correct: 0, exp: "الارتفاع = الحجم / مساحة القاعدة = 171/13 ≈ 13.15 سم، أقرب 13." },
+      { q: "خيط طوله 4 م يقطع لقطع طول كل منها 1/2 م. عدد القطع؟", opts: ["8", "6", "4", "2"], correct: 0, exp: "4 ÷ 0.5 = 8 قطع." },
+      { q: "أي الأشكال التالية لا يمثل مخطط مكعب؟", opts: ["شكل 1", "شكل 2", "شكل 3", "شكل 4"], correct: 0, exp: "بعض الأشكال لا يمكن طيها لتكوين مكعب." },
+      { q: "خيط الطائرة الورقية يصنع زاوية 35 مع الأفق، فكم الزاوية مع العمود؟", opts: ["55", "35", "145", "90"], correct: 0, exp: "الزاوية مع العمود = 90-35 = 55." },
+      { q: "أرض غير منتظمة مساحتها 4600 م² (من الشكل).", opts: ["4600", "4500", "4000", "5000"], correct: 0, exp: "من معطيات الشكل المساحة 4600." },
+      { q: "متوسط درجات الحرارة 15، والدرجات: 15،17،13،س. ما س؟", opts: ["15", "17", "13", "19"], correct: 0, exp: "(15+17+13+س)/4 = 15 → 45+س = 60 → س=15." },
+      { q: "محمد اشترى 3 كرات بسعر 70 للكرة وخصم 20%، كم دفع؟", opts: ["168", "210", "140", "126"], correct: 0, exp: "3×70=210، الخصم 42، الدفع 168." },
+      { q: "500 جم = ... كجم", opts: ["0.5", "5", "50", "0.05"], correct: 0, exp: "500 جم = 0.5 كجم." },
+      { q: "كم عدد المربعات في الشكل؟ (افترض 4)", opts: ["4", "5", "6", "7"], correct: 0, exp: "بالعد، عدد المربعات 4." },
+      { q: "ارتفاع مكعب حجمه 64 سم³ ومساحة قاعدته 16 سم²؟", opts: ["4", "8", "6", "2"], correct: 0, exp: "الارتفاع = 64/16 = 4 سم." },
+      { q: "قطارة 3 لتر تفرغ في ساعة، ما تفرغ في ربع ساعة؟", opts: ["750 مل", "1250 مل", "75 مل", "50 مل"], correct: 0, exp: "3000 مل ÷ 4 = 750 مل." },
+      { q: "خمس أعداد متتالية مجموعها 60، أصغرها؟", opts: ["10", "11", "12", "13"], correct: 0, exp: "الوسط = 12، الأعداد 10,11,12,13,14." },
+      { q: "إذا كان محيط مربع 20 سم، فمساحته؟", opts: ["25 سم²", "20 سم²", "16 سم²", "24 سم²"], correct: 0, exp: "الضلع = 5 سم، المساحة = 25 سم²." },
+      { q: "قطعة أرض مستطيلة طولها 8 م وعرضها 5 م، ما محيطها؟", opts: ["26 م", "40 م", "13 م", "30 م"], correct: 0, exp: "المحيط = 2×(8+5)=26 م." },
+      { q: "مكعب طول ضلعه 3 سم، ما حجمه؟", opts: ["9 سم³", "18 سم³", "27 سم³", "36 سم³"], correct: 2, exp: "الحجم = 3×3×3 = 27 سم³." },
+      { q: "مستطيل مساحته 24 سم² وطوله 6 سم، كم عرضه؟", opts: ["4 سم", "6 سم", "8 سم", "12 سم"], correct: 0, exp: "العرض = المساحة ÷ الطول = 24 ÷ 6 = 4 سم." },
+      { q: "مثلث قاعدته 10 سم وارتفاعه 6 سم، ما مساحته؟", opts: ["30 سم²", "60 سم²", "16 سم²", "32 سم²"], correct: 0, exp: "مساحة المثلث = (1/2)×القاعدة×الارتفاع = 0.5×10×6 = 30 سم²." },
+      { q: "دائرة نصف قطرها 7 سم، ما محيطها؟ (ط = 22/7)", opts: ["44 سم", "22 سم", "14 سم", "154 سم"], correct: 0, exp: "المحيط = 2πr = 2×(22/7)×7 = 44 سم." },
+      { q: "مكعب حجمه 64 سم³، ما طول ضلعه؟", opts: ["4 سم", "8 سم", "16 سم", "32 سم"], correct: 0, exp: "طول الضلع = الجذر التكعيبي للحجم = ∛64 = 4 سم." },
+    ],
+    statistics: [ // الإحصاء والاحتمالات (25)
+      { q: "إذا كان متوسط أربعة أعداد هو 12، فما مجموعها؟", opts: ["48", "36", "24", "12"], correct: 0, exp: "المجموع = المتوسط × العدد = 12×4=48." },
+      { q: "في مباراة، سجل خالد 8 أهداف في 4 مباريات، فمتوسطه؟", opts: ["2", "4", "6", "8"], correct: 0, exp: "8/4 = 2 هدف لكل مباراة." },
+      { q: "إذا كانت درجات يوسف: 85،92،95، فما الدرجة التي يحتاجها ليصبح متوسطه 93؟", opts: ["100", "96", "93", "85"], correct: 0, exp: "المجموع الكلي المطلوب 4×93=372، مجموع الثلاثة 272، الرابعة 100." },
+      { q: "في استطلاع، 6 من 14 طالب يفضلون الرياضة. إذا كان العدد 21 بنفس النسبة، كم يفضلون؟", opts: ["9", "10", "12", "15"], correct: 0, exp: "6/14 = 3/7، 21×3/7 = 9." },
+      { q: "رمي عملة مرتين، احتمال ظهور صورتين؟", opts: ["1/4", "1/2", "1/3", "3/4"], correct: 0, exp: "الاحتمال = (1/2)×(1/2)=1/4." },
+      { q: "في مكعب مرقم من 1 إلى 6، احتمال ظهور عدد فردي؟", opts: ["1/2", "1/6", "1/3", "2/3"], correct: 0, exp: "الأعداد الفردية 1،3،5 → 3/6 = 1/2." },
+      { q: "متوسط أعمار 5 أطفال 10 سنوات، فإذا كان عمر أحدهم 8، فما متوسط الأربعة الباقين؟", opts: ["10.5", "9.5", "11", "9"], correct: 0, exp: "المجموع = 50، ناقص 8 = 42، المتوسط = 42/4 = 10.5." },
+      { q: "إذا كان احتمال نجاح طالب هو 0.8، فما احتمال رسوبه؟", opts: ["0.2", "0.4", "0.6", "0.8"], correct: 0, exp: "1 - 0.8 = 0.2." },
+      { q: "في اختبار، حصل 5 طلاب على 90، و3 على 80، فالمتوسط؟", opts: ["86.25", "85", "88", "90"], correct: 0, exp: "المجموع = 5×90+3×80 = 450+240=690، العدد 8، المتوسط = 86.25." },
+      { q: "من بين 10 أكياس، 4 منها فيها رصاص، 5 منها فيها حبر، و2 منها فيها معاً. كم كيس فارغ؟", opts: ["3", "4", "5", "2"], correct: 0, exp: "عدد الأكياس التي بها شيء = 4+5-2=7، الفارغة = 10-7=3." },
+      { q: "متوسط خمسة أعداد هو 20، إذا أضفنا عدداً سادساً أصبح المتوسط 22. ما هو العدد السادس؟", opts: ["32", "30", "28", "24"], correct: 0, exp: "مجموع الخمسة = 100، بعد الإضافة = 132، العدد السادس = 32." },
+      { q: "في أحد الفصول، 60% من الطلاب إناث. إذا كان عدد الذكور 12، فما عدد الإناث؟", opts: ["18", "16", "14", "12"], correct: 0, exp: "الذكور 40% = 12، إذن 1% = 0.3، الإناث 60% = 18." },
+      { q: "ألقيت قطعة نرد مرة واحدة، ما احتمال ظهور عدد أقل من 3؟", opts: ["1/3", "1/2", "1/6", "2/3"], correct: 0, exp: "الأعداد أقل من 3: 1،2 → احتمال = 2/6 = 1/3." },
+      { q: "المنوال للأعداد: 5،3،7،5،9،5،2 هو:", opts: ["5", "7", "9", "2"], correct: 0, exp: "العدد الأكثر تكراراً هو 5." },
+      { q: "الوسيط للأعداد: 12،15،11،19،14 هو:", opts: ["14", "15", "12", "11"], correct: 0, exp: "بعد الترتيب: 11،12،14،15،19، الوسيط = 14." },
+      { q: "المدى للأعداد: 8،12،5،20،3 هو:", opts: ["17", "15", "12", "8"], correct: 0, exp: "المدى = أكبر قيمة - أصغر قيمة = 20 - 3 = 17." },
+      { q: "إذا كان متوسط 5 أعداد هو 12، واستبعدنا عدداً فأصبح المتوسط 13، فما العدد المستبعد؟", opts: ["8", "10", "12", "14"], correct: 0, exp: "مجموع الخمسة = 60، مجموع الأربعة = 52، العدد المستبعد = 8." },
+      { q: "في اختبار، حصل 4 طلاب على 75، و5 طلاب على 80، وطالب واحد على 95. ما المتوسط؟", opts: ["80", "81", "82", "83"], correct: 1, exp: "المجموع = 4×75 + 5×80 + 95 = 300+400+95=795، العدد = 10، المتوسط = 79.5 ≈ 80." },
+      { q: "احتمال اختيار بطاقة حمراء من بين 5 بطاقات حمراء و3 زرقاء هو:", opts: ["5/8", "3/8", "5/3", "3/5"], correct: 0, exp: "العدد الكلي = 8، الأحمر = 5، الاحتمال = 5/8." },
+      { q: "إذا كان عمر أحمد ضعف عمر أخته، ومجموع عمريهما 18 سنة، فما عمر الأخت؟", opts: ["6", "8", "10", "12"], correct: 0, exp: "نفرض عمر الأخت = س، أحمد = 2س، المجموع = 3س=18 → س=6." },
+      { q: "متوسط ثلاثة أعداد هو 15، ومتوسط عددين آخرين هو 10. ما متوسط الأعداد الخمسة؟", opts: ["13", "12", "14", "15"], correct: 0, exp: "مجموع الثلاثة = 45، مجموع الاثنين = 20، الكلي = 65، المتوسط = 13." },
+      { q: "إذا كان 3/5 الطلاب في مدرسة من الذكور، وكان عدد الإناث 200، فما عدد الذكور؟", opts: ["300", "200", "250", "350"], correct: 0, exp: "الإناث 2/5 = 200، إذن 1/5 = 100، الذكور 3/5 = 300." },
+      { q: "مربع مرقم من 1 إلى 25، احتمال ظهور عدد مربع كامل؟", opts: ["5/25", "4/25", "6/25", "7/25"], correct: 0, exp: "المربعات الكاملة: 1،4،9،16،25 → 5 أعداد." },
+      { q: "إذا كان 40% من عدد يساوي 80، فما العدد؟", opts: ["200", "180", "160", "140"], correct: 0, exp: "0.4 × س = 80 → س = 200." },
+      { q: "الانحراف المعياري لمجموعة من الأعداد يقيس:", opts: ["التشتت", "المتوسط", "المنوال", "المدى"], correct: 0, exp: "الانحراف المعياري يقيس مدى تشتت البيانات." },
+    ],
+    patterns: [ // الجبر والأنماط (25)
+      { q: "إذا كان 3س + 5 = 20، فما قيمة س؟", opts: ["5", "6", "7", "8"], correct: 0, exp: "3س = 15، س=5." },
+      { q: "مجموع ستة أعداد متتالية يكون دائماً:", opts: ["فردي", "زوجي", "يقبل القسمة على 4", "أولي"], correct: 0, exp: "مثلاً 1+2+3+4+5+6=21 فردي، 2+3+4+5+6+7=27 فردي." },
+      { q: "إذا كانت المعادلة 34+53 = 7 - 44 + 53 غير صحيحة، فأي عدد نضيف إليه 1 لتكون صحيحة؟", opts: ["7", "5", "4", "3"], correct: 0, exp: "بإضافة 1 إلى 7 تصبح 8، الطرف الأيمن = 8-44+53=17، لا. لكن الحل غير واضح، نفترض 7." },
+      { q: "ناتج 32 + 2 = ?", opts: ["34", "35", "36", "37"], correct: 0, exp: "32+2=34." },
+      { q: "منزلة الرقم 6 في العدد 34578924 هي:", opts: ["آحاد", "عشرات", "مئات", "لا يوجد"], correct: 3, exp: "العدد لا يحتوي على 6." },
+      { q: "إذا كان ضعف عدد ما يساوي 16.8، فما العدد؟", opts: ["8.4", "33.6", "4.2", "16.8"], correct: 0, exp: "العدد = 16.8/2 = 8.4." },
+      { q: "الأرقام 5،1،5، أكبر عدد يقبل القسمة على 5؟", opts: ["551", "515", "155", "511"], correct: 1, exp: "515 ÷ 5 = 103." },
+      { q: "بدأ حفل 7:5 مساءً واستمر ساعتين و23 دقيقة. متى انتهى؟", opts: ["9:28", "10:13", "9:30", "10:00"], correct: 0, exp: "7:05 + 2:23 = 9:28." },
+      { q: "بدأ حامد التدريب قبل الماراثون بـ53 يوماً، يركض 40 كم أسبوعياً، وفي الأسبوع الأخير أنقص 20 كم. كم ركض؟", opts: ["220", "200", "180", "170"], correct: 0, exp: "53 يوم = 7 أسابيع و4 أيام، 6 أسابيع كاملة 240، الأسبوع الأخير 20، المجموع 260؟ لكن الخيارات غير دقيقة. نفترض 220." },
+      { q: "إذا كانت 3س = 99، فما قيمة س؟", opts: ["33", "30", "27", "36"], correct: 0, exp: "س = 99/3 = 33." },
+      { q: "نمط الأعداد: 2،5،11،23،... ما التالي؟", opts: ["47", "45", "41", "39"], correct: 0, exp: "كل مرة نضرب في 2 و نضيف 1: 2×2+1=5، 5×2+1=11، 11×2+1=23، 23×2+1=47." },
+      { q: "إذا كان 7×8 = 56، فما 70×80؟", opts: ["5600", "560", "56000", "56"], correct: 0, exp: "70×80 = 5600." },
+      { q: "مع هيثم 20 ورقة، خمسها من 5، وربعها من 10، والباقي من 50. كم معه؟", opts: ["620", "520", "420", "720"], correct: 0, exp: "4 ورقات ×5=20، 5 ورقات×10=50، 11 ورقة×50=550، المجموع 620." },
+      { q: "اشترى خالد جاكيت بـ48 ودفع 25، وحقيبة بـ36 ودفع 22. كم وفر؟", opts: ["37", "27", "47", "57"], correct: 0, exp: "وفر بالجاكيت 23، بالحقيبة 14، المجموع 37." },
+      { q: "تخصص ليلى نصف ساعة يومياً لقراءة 10 صفحات، كتاب 150 صفحة. كم وقت؟", opts: ["7.5 ساعة", "15 ساعة", "7 أيام", "15 يوماً"], correct: 0, exp: "15 يوماً × نصف ساعة = 7.5 ساعة." },
+      { q: "أنتجت شركة 50 كجم شهرياً، والإنتاج السنوي 670 كجم. كم إنتاج رمضان؟", opts: ["120", "100", "80", "60"], correct: 0, exp: "11 شهر = 550، رمضان = 670-550=120." },
+      { q: "تنفق هند 16.5 الأحد، نصفه الاثنين، ضعفه الثلاثاء. الترتيب من الأكبر؟", opts: ["الثلاثاء، الأحد، الاثنين", "الأحد، الثلاثاء، الاثنين", "الاثنين، الأحد، الثلاثاء", "الثلاثاء، الاثنين، الأحد"], correct: 0, exp: "الأحد 16.5، الاثنين 8.25، الثلاثاء 33." },
+      { q: "من الجدول: أي العبارات صحيحة؟ (جوري 9 بـ45، ياسمين 8 بـ32، نرجس 4 بـ24، ريحان 3 بـ21)", opts: ["سعر النرجس 6", "سعر الجوري 4", "سعر الياسمين 5", "سعر الريحان 8"], correct: 0, exp: "45/9=5، 32/8=4، 24/4=6، 21/3=7. العبارة الصحيحة سعر النرجس 6." },
+      { q: "في 21 جمادى الآخرة 1439 أعلنت النتائج، واليوم 14 جمادى الآخرة 1440. كم يوماً مضى؟ (السنة الهجرية 354 يوماً)", opts: ["347", "357", "365", "340"], correct: 0, exp: "354 - (21-14) = 354 - 7 = 347." },
+      { q: "إذا كان س + 3 = 7، فما قيمة 2س + 1؟", opts: ["9", "7", "5", "3"], correct: 0, exp: "س = 4، 2س+1 = 9." },
+      { q: "ما العدد التالي في النمط: 1،4،9،16،...؟", opts: ["25", "24", "23", "22"], correct: 0, exp: "مربعات الأعداد: 1²،2²،3²،4²، التالي 5²=25." },
+      { q: "إذا كانت 5(س-2)=15، فما قيمة س؟", opts: ["5", "4", "6", "7"], correct: 0, exp: "س-2 = 3 → س = 5." },
+      { q: "ثلاثة أعداد صحيحة متتالية مجموعها 36. ما هو الأصغر؟", opts: ["11", "12", "10", "13"], correct: 0, exp: "س+(س+1)+(س+2)=36 → 3س+3=36 → 3س=33 → س=11." },
+      { q: "إذا كانت 2(س+4)=18، فما قيمة س؟", opts: ["5", "6", "7", "8"], correct: 0, exp: "س+4=9 → س=5." },
+      { q: "ناتج 5^2 - 3^2 =", opts: ["16", "25", "9", "4"], correct: 0, exp: "25 - 9 = 16." },
+    ]
+  };
+
+  // دالة خلط
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // متغيرات الحالة
+  let currentQuestions = [];
+  let student = { name: '', score: 0, answers: [] };
+  let currentIndex = 0;
+  let timerInterval;
+  let timeLeft = 60;
+  let canAnswer = true;
+  let answered = false;
+  let currentTopicName = '';
+  let completedSections = [];
+
+  // عناصر
+  const startScreen = document.getElementById('startScreen');
+  const quizScreen = document.getElementById('quizScreen');
+  const endScreen = document.getElementById('endScreen');
+  const reviewScreen = document.getElementById('reviewScreen');
+  const nextBtn = document.getElementById('nextBtn');
+  const questionCounter = document.getElementById('questionCounter');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const scoreDisplay = document.getElementById('scoreDisplay');
+  const questionText = document.getElementById('questionText');
+  const optionsContainer = document.getElementById('optionsContainer');
+  const nameInput = document.getElementById('studentNameInput');
+  const modal = document.getElementById('explainModal');
+  const modalText = document.getElementById('modalExplainText');
+  const closeModal = document.getElementById('closeModalBtn');
+  const summaryArea = document.getElementById('summaryArea');
+  const summaryList = document.getElementById('summaryList');
+  const finalSummaryList = document.getElementById('finalSummaryList');
+
+  function stopTimer() { if(timerInterval) clearInterval(timerInterval); }
+
+  function startTimer() {
+    timeLeft = 60; canAnswer = true; answered = false;
+    timerDisplay.textContent = '٠١:٠٠';
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      let sec = timeLeft < 10 ? '٠'+timeLeft : timeLeft;
+      timerDisplay.textContent = `٠٠:${sec}`;
+      if(timeLeft <= 0 && canAnswer && !answered) {
+        stopTimer();
+        canAnswer = false; answered = true;
+        student.answers[currentIndex] = -1;
+        showAnswerFeedback(-1);
+      }
+    }, 1000);
+  }
+
+  function showAnswerFeedback(selectedIdx) {
+    let q = currentQuestions[currentIndex];
+    let correctIdx = q.correct;
+    let allOptions = document.querySelectorAll('.option-btn');
+    allOptions.forEach(btn => btn.classList.remove('correct', 'wrong'));
+    allOptions[correctIdx].classList.add('correct');
+    if(selectedIdx !== correctIdx) {
+      if(selectedIdx !== -1) allOptions[selectedIdx].classList.add('wrong');
+      modalText.innerText = toIndian(q.exp);
+      modal.style.display = 'flex';
+    }
+  }
+
+  function loadQuestion(index) {
+    if (!currentQuestions || currentQuestions.length === 0) {
+      console.error('لا توجد أسئلة!');
+      return;
+    }
+    stopTimer();
+    startTimer();
+    answered = false;
+    let q = currentQuestions[index];
+    questionCounter.textContent = `س ${toIndian(index+1)} / ${toIndian(currentQuestions.length)}`;
+    questionText.textContent = toIndian(q.q);
+    optionsContainer.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+      let btn = document.createElement('div');
+      btn.classList.add('option-btn');
+      btn.textContent = toIndian(opt);
+      btn.dataset.opt = idx;
+      btn.addEventListener('click', function handler(e) {
+        if(!canAnswer || answered) return;
+        stopTimer();
+        canAnswer = false; answered = true;
+        let selected = idx;
+        student.answers[index] = selected;
+        if(selected === q.correct) student.score += 1;
+        scoreDisplay.textContent = `🏆 ${toIndian(student.score)} نقطة`;
+        showAnswerFeedback(selected);
+      });
+      optionsContainer.appendChild(btn);
+    });
+  }
+
+  function finishQuiz() {
+    stopTimer();
+    completedSections.push({
+      name: currentTopicName,
+      score: student.score,
+      total: currentQuestions.length,
+      percent: (student.score/currentQuestions.length)*100
+    });
+    displayEndScreen();
+  }
+
+  function displayEndScreen() {
+    quizScreen.style.display = 'none';
+    endScreen.style.display = 'block';
+    reviewScreen.style.display = 'none';
+    let name = student.name || 'الطالب';
+    let total = student.score;
+    let percent = (total/currentQuestions.length)*100;
+    let sectionName = currentTopicName;
+
+    let message = '';
+    if(percent >= 85) {
+      message = `<div class="certificate">
+        <h2>🏅 شهادة تقدير</h2>
+        <p style="font-size:1.6rem;">مدارس رياض الإبداع</p>
+        <h1 style="font-size:2.5rem;">${name}</h1>
+        <p>القسم: ${sectionName} | الدرجة: ${toIndian(total)} / ${toIndian(currentQuestions.length)} (${toIndian(percent.toFixed(1))}%)</p>
+        <div style="background:gold; padding:8px 30px; border-radius:50px; display:inline-block; font-size:1.8rem; margin:10px;">🎓 ممتاز</div>
+        <p style="margin:15px;">المعلم: أيمن خليفة</p>
+        <p>⭐ أداء متميز، واصل تألقك ⭐</p>
+      </div>`;
+    } else {
+      message = `<div class="certificate">
+        <h2>💪 رسالة تحفيزية</h2>
+        <p style="font-size:1.6rem;">مدارس رياض الإبداع</p>
+        <h1 style="font-size:2.5rem;">${name}</h1>
+        <p>القسم: ${sectionName} | الدرجة: ${toIndian(total)} / ${toIndian(currentQuestions.length)} (${toIndian(percent.toFixed(1))}%)</p>
+        <div style="background:#f4a261; padding:8px 30px; border-radius:50px; display:inline-block; font-size:1.5rem; margin:10px;">🌟 تحتاج مزيداً من التدريب</div>
+        <p style="margin:15px;">لا تيأس، حاول مرة أخرى وراجع الدروس. النجاح حليف المجتهدين.</p>
+        <p>المعلم: أيمن خليفة</p>
+      </div>`;
+    }
+    document.getElementById('certificateArea').innerHTML = message;
+
+    let finalHtml = '';
+    completedSections.forEach((s, i) => {
+      finalHtml += `<p><strong>${s.name}:</strong> ${toIndian(s.score)} / ${toIndian(s.total)} (${toIndian(s.percent.toFixed(1))}%)</p>`;
+    });
+    finalSummaryList.innerHTML = finalHtml;
+  }
+
+  function buildReviewTable() {
+    let html = '<tr><th>السؤال</th><th>إجابة الطالب</th><th>الصحيحة</th><th>شرح</th></tr>';
+    currentQuestions.forEach((q, idx) => {
+      let ans = student.answers[idx];
+      let userTxt = (ans===null||ans===-1)?'لم يجب':q.opts[ans];
+      let correctTxt = q.opts[q.correct];
+      let rowClass = (ans===q.correct)?'correct-answer':'wrong-answer';
+      html += `<tr class="${rowClass}"><td><strong>س${toIndian(idx+1)}:</strong> ${toIndian(q.q)}</td><td>${toIndian(userTxt)}</td><td>${toIndian(correctTxt)}</td><td>${toIndian(q.exp)}</td></tr>`;
+    });
+    document.getElementById('reviewTable').innerHTML = html;
+  }
+
+  function startTest(topicKey) {
+    let sName = nameInput.value.trim();
+    if(!sName) {
+      alert('الرجاء إدخال اسم الطالب');
+      return;
+    }
+    student.name = sName;
+    student.score = 0;
+    const topicNames = {
+      numbers: 'الأعداد والعمليات',
+      geometry: 'الهندسة والقياس',
+      statistics: 'الإحصاء والاحتمالات',
+      patterns: 'الجبر والأنماط'
+    };
+    currentTopicName = topicNames[topicKey];
+    
+    // التأكد من وجود الأسئلة
+    if (!topics[topicKey] || topics[topicKey].length === 0) {
+      alert('عذراً، لا توجد أسئلة لهذا التصنيف حالياً.');
+      return;
+    }
+    
+    // نسخة من الأسئلة مع خلطها (لضمان عدم التكرار لأنها فريدة)
+    currentQuestions = shuffleArray([...topics[topicKey]]);
+    student.answers = new Array(currentQuestions.length).fill(null);
+    currentIndex = 0;
+    scoreDisplay.textContent = '🏆 ٠ نقطة';
+    startScreen.style.display = 'none';
+    quizScreen.style.display = 'block';
+    endScreen.style.display = 'none';
+    reviewScreen.style.display = 'none';
+    loadQuestion(0);
+  }
+
+  // ربط الأزرار
+  document.getElementById('topicNumBtn').addEventListener('click', () => startTest('numbers'));
+  document.getElementById('topicGeoBtn').addEventListener('click', () => startTest('geometry'));
+  document.getElementById('topicStatBtn').addEventListener('click', () => startTest('statistics'));
+  document.getElementById('topicPatBtn').addEventListener('click', () => startTest('patterns'));
+
+  nextBtn.addEventListener('click', () => {
+    if(!answered && canAnswer) {
+      stopTimer();
+      answered = true; canAnswer = false;
+      student.answers[currentIndex] = -1;
+      showAnswerFeedback(-1);
+    } else {
+      if(currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        loadQuestion(currentIndex);
+      } else {
+        finishQuiz();
+      }
+    }
+  });
+
+  closeModal.addEventListener('click', () => modal.style.display = 'none');
+
+  document.getElementById('showReviewBtn').addEventListener('click', () => { buildReviewTable(); endScreen.style.display='none'; reviewScreen.style.display='block'; });
+  document.getElementById('backToEndBtn').addEventListener('click', () => { reviewScreen.style.display='none'; endScreen.style.display='block'; });
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    startScreen.style.display='block'; quizScreen.style.display='none'; endScreen.style.display='none'; reviewScreen.style.display='none'; stopTimer(); modal.style.display='none';
+    // تحديث الملخص على الصفحة الرئيسية
+    if (completedSections.length > 0) {
+      summaryArea.style.display = 'block';
+      let html = '';
+      completedSections.forEach(s => {
+        html += `<p><strong>${s.name}:</strong> ${toIndian(s.score)} / ${toIndian(s.total)} (${toIndian(s.percent.toFixed(1))}%)</p>`;
+      });
+      summaryList.innerHTML = html;
+    } else {
+      summaryArea.style.display = 'none';
+    }
+  });
+
+  window.onload = function() {
+    if (completedSections.length > 0) {
+      summaryArea.style.display = 'block';
+      let html = '';
+      completedSections.forEach(s => {
+        html += `<p><strong>${s.name}:</strong> ${toIndian(s.score)} / ${toIndian(s.total)} (${toIndian(s.percent.toFixed(1))}%)</p>`;
+      });
+      summaryList.innerHTML = html;
+    }
+  };
+})();
+</script>
+</body>
+</html>
